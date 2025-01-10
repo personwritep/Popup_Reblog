@@ -1,0 +1,65 @@
+// ==UserScript==
+// @name         Popup Reblog
+// @namespace    http://tampermonkey.net/
+// @version      0.6
+// @description  リブログリンクを別タブで開く
+// @author       Ameba Blog User
+// @match        https://ameblo.jp/*
+// @exclude      https://ameblo.jp/*/image*
+// @noframes
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=ameblo.jp
+// @grant        none
+// ==/UserScript==
+
+let target=document.querySelector('head');
+let monitor=new MutationObserver(new_retry);
+monitor.observe(target, { childList: true });
+
+function new_retry(){
+    let iframe_doc;
+    let retry=0;
+    let interval=setInterval(wait_iframe_doc, 100);
+    function wait_iframe_doc(){
+        retry++;
+        if(retry>10){ // リトライ制限 10回 1sec
+            clearInterval(interval); }
+
+        try{
+            iframe_doc=
+                document.querySelector('.reblogCard').contentWindow.document; } // 監視 target
+        catch (e){ ; }
+
+        if(iframe_doc){
+            clearInterval(interval);
+
+            let reblog_card=iframe_doc.querySelector('.rb-card');
+            if(reblog_card){
+                let data_href=reblog_card.getAttribute('href');
+                let card_head=reblog_card.querySelector('.rb-card__head');
+                card_head.style.boxShadow=
+                    '-14px 0 0 0 #8eb6ca, 14px 0 0 0 #8eb6ca, inset 0 0 0 40px #8eb6ca';
+                card_head.querySelector('.rb-text-ellipsis').style.color='#fff';
+                card_head.querySelector('.rb-text-ellipsis').style.fontSize='14px';
+                card_head.querySelector('.rb-text-ellipsis').style.margin='10px';
+
+                let rb_card_main=reblog_card.querySelector('.rb-card__main');
+                rb_card_main.addEventListener('click', function(event){
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if(event.ctrlKey==true){
+                        window.location.href=data_href; }
+                    else{
+                        window.open(data_href, '_blank'); }}, false);
+
+                document.body.addEventListener('keydown', function(event){
+                    if(event.ctrlKey==true){
+                        card_head.style.boxShadow='none';
+                        card_head.querySelector('.rb-text-ellipsis').style.color='#666';
+                        document.body.addEventListener('keyup', function(event){
+                            card_head.style.boxShadow=
+                                '-14px 0 0 0 #8eb6ca, 14px 0 0 0 #8eb6ca, inset 0 0 0 40px #8eb6ca';
+                            card_head.querySelector('.rb-text-ellipsis').style.color='#fff'; });}});
+            }}
+    } // wait_iframe_doc
+} // new_retry
+
