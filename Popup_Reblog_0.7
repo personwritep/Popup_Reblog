@@ -6,12 +6,11 @@
 // @author       Ameba Blog User
 // @match        https://ameblo.jp/*
 // @exclude      https://ameblo.jp/*/image*
-// @match       https://ameblo.jp/s/embed/reblog-card/*
+// @noframes
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=ameblo.jp
 // @grant        none
 // ==/UserScript==
 
-// @noframes
 
 let target=document.querySelector('head');
 let monitor=new MutationObserver(new_retry);
@@ -25,7 +24,6 @@ function new_retry(){
         retry++;
         if(retry>10){ // リトライ制限 10回 1sec
             clearInterval(interval); }
-
         try{
             iframe_doc=
                 document.querySelector('.reblogCard').contentWindow.document; } // 監視 target
@@ -67,7 +65,7 @@ function new_retry(){
                     if(event.ctrlKey==true){
                         reblog_card.classList.add('transfer');
                         document.body.addEventListener('keyup', function(event){
-                        reblog_card.classList.remove('transfer'); }); }});
+                            reblog_card.classList.remove('transfer'); }); }});
             }}
     } // wait_iframe_doc
 } // new_retry
