@@ -9,8 +9,8 @@
 // @noframes
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=ameblo.jp
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/personwritep/Popup_Reblog/refs/heads/main/Popup_Reblog.user.js
-// @downloadURL    https://raw.githubusercontent.com/personwritep/Popup_Reblog/refs/heads/main/Popup_Reblog.user.js
+// @updateURL    https://github.com/personwritep/Popup_Reblog/raw/main/Popup_Reblog.user.js
+// @downloadURL    https://github.com/personwritep/Popup_Reblog/raw/main/Popup_Reblog.user.js
 // ==/UserScript==
 
 
