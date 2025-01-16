@@ -36,10 +36,11 @@ function new_retry(){
             let style=
                 '<style class="r_style">'+
                 '.rb-card { box-shadow: 0 0 0 1px #009688; } '+
-                '.rb-card__main { height: 174px; } '+
-                '.rb-card__icon { font-size: 24px; padding-bottom: 2px; border: none; } '+
+                '.rb-card__main { padding: 4px 16px 0; height: 174px; } '+
+                '.rb-card__icon { font-size: 24px; height: 24px; border: none; } '+
                 '.rb-card__icon-text { font-size: 14px; top: -7px; } '+
-                '.rb-card__head { padding: 6px 8px 2px; background: #009688; } '+
+                '.rb-card__head { padding: 4px 20px 0; margin: 0 -12px; background: #009688; } '+
+                '.rb-card__author-thumb>img { width: 36px; height: 36px; } '+
                 '.rb-card__author-title { font: bold 16px/22px Meiryo; color: #fff; } '+
                 '.rb-card__author-title p { margin: 0; } '+
                 '.rb-card__button-more { display: none; } '+
