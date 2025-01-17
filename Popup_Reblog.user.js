@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Popup Reblog
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.1
 // @description  リブログリンクを別タブで開く
 // @author       Ameba Blog User
 // @match        https://ameblo.jp/*
