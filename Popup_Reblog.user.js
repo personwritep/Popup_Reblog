@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Popup Reblog
 // @namespace    http://tampermonkey.net/
-// @version      0.9
+// @version      1.0
 // @description  リブログリンクを別タブで開く
 // @author       Ameba Blog User
 // @match        https://ameblo.jp/*
@@ -46,6 +46,13 @@ function new_retry(){
                 '.rb-card__button-more { display: none; } '+
                 '.transfer .rb-card__head { background: #fff; } '+
                 '.transfer .rb-card__author-title { color: #000; }'+
+                // リブログカードが壊れた場合
+                '.sorry { margin: 20px; } '+
+                '.sorry .ambHeader { background: #00d8c3; cursor: pointer; } '+
+                '.sorry .ambHeader:hover { opacity: 0.8; } '+
+                '.sorry .contents { padding: 6px; background: #fff; } '+
+                '.sorry .contents__text, .sorry .sp_footer__list { display: none; } '+
+                '.sorry .sp_footer { padding: 20px; } '+
                 '</style>';
 
             if(!iframe_doc.querySelector('.r_style')){
@@ -69,6 +76,40 @@ function new_retry(){
                         reblog_card.classList.add('transfer');
                         document.body.addEventListener('keyup', function(event){
                             reblog_card.classList.remove('transfer'); }); }});
-            }}
+
+            } // if(reblog_card)
+
+            else{ // リブログカードが壊れている場合
+                let iframe=document.querySelector('.reblogCard');
+                iframe.style.outline='1px solid #009688';
+                iframe.style.outlineOffset='-15px';
+                iframe.style.borderRadius='19px';
+
+                let if_src=iframe.getAttribute('src');
+                if(if_src){
+                    let if_href=if_src.substring(0, if_src.indexOf('?reblogAmeba'));
+                    if_href=if_href.replace('s/embed/reblog-card/', '');
+
+                    let header_link=iframe_doc.querySelectorAll('.sorry .my_page a');
+                    if(header_link[0]){
+                        header_link[0].setAttribute('href', if_href); }
+
+                    for(let k=1; k<header_link.length; k++){
+                        header_link[k].remove(); }
+
+                    let contents_title=iframe_doc.querySelector('.sorry .contents__title');
+                    if(contents_title){
+                        contents_title.textContent=if_href; }
+
+                    let ambHeader=iframe_doc.querySelector('.ambHeader');
+                    if(ambHeader){
+                        ambHeader.onclick=function(event){
+                            event.preventDefault();
+                            window.open(if_href); }}}
+
+            } // リブログカードが壊れている場合
+
+        } // if(iframe_doc)
+
     } // wait_iframe_doc
 } // new_retry
