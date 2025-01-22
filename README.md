@@ -2,4 +2,5 @@
 <br>
 このツールの詳細については、以下のページを参照ください。<br>
 https://ameblo.jp/personwritep/entry-12883026669.html
+<br>
 https://ameblo.jp/personwritep/entry-12883441437.html
