@@ -1,16 +1,16 @@
 // ==UserScript==
-// @name         Popup Reblog
-// @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  リブログリンクを別タブで開く
-// @author       Ameba Blog User
+// @name        Popup Reblog
+// @namespace        http://tampermonkey.net/
+// @version        1.0
+// @description        リブログリンクを別タブで開く
+// @author        Ameba Blog User
 // @match        https://ameblo.jp/*
-// @exclude      https://ameblo.jp/*/image*
+// @exclude        https://ameblo.jp/*/image*
+// @icon        https://www.google.com/s2/favicons?sz=64&domain=ameblo.jp
 // @noframes
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=ameblo.jp
 // @grant        none
-// @updateURL    https://github.com/personwritep/Popup_Reblog/raw/main/Popup_Reblog.user.js
-// @downloadURL    https://github.com/personwritep/Popup_Reblog/raw/main/Popup_Reblog.user.js
+// @updateURL        https://github.com/personwritep/Popup_Reblog/raw/main/Popup_Reblog.user.js
+// @downloadURL        https://github.com/personwritep/Popup_Reblog/raw/main/Popup_Reblog.user.js
 // ==/UserScript==
 
 
