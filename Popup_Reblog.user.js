@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Popup Reblog
 // @namespace        http://tampermonkey.net/
-// @version        1.0
+// @version        1.1
 // @description        リブログリンクを別タブで開く
 // @author        Ameba Blog User
 // @match        https://ameblo.jp/*
@@ -59,55 +59,68 @@ function new_retry(){
                 iframe_doc.body.insertAdjacentHTML('beforeend', style); }
 
 
-            let reblog_card=iframe_doc.querySelector('.rb-card');
-            if(reblog_card){
-                let data_href=reblog_card.getAttribute('href');
-                let rb_card_main=reblog_card.querySelector('.rb-card__main');
-                rb_card_main.addEventListener('click', function(event){
-                    event.preventDefault();
-                    event.stopImmediatePropagation();
-                    if(event.ctrlKey==true){
-                        window.location.href=data_href; }
-                    else{
-                        window.open(data_href, '_blank'); }}, false);
+            let p_reblog=
+                '<style class="p_reblog">'+
+                'iframe[data-entry-id] { height: 192px !important; }</style>';
 
-                document.body.addEventListener('keydown', function(event){
-                    if(event.ctrlKey==true){
-                        reblog_card.classList.add('transfer');
-                        document.body.addEventListener('keyup', function(event){
-                            reblog_card.classList.remove('transfer'); }); }});
+            if(!document.querySelector('.p_reblog')){
+                document.body.insertAdjacentHTML('beforeend', p_reblog); }
 
-            } // if(reblog_card)
 
-            else{ // リブログカードが壊れている場合
-                let iframe=document.querySelector('.reblogCard');
-                iframe.style.outline='1px solid #009688';
-                iframe.style.outlineOffset='-15px';
-                iframe.style.borderRadius='19px';
+            set_reblog(iframe_doc);
 
-                let if_src=iframe.getAttribute('src');
-                if(if_src){
-                    let if_href=if_src.substring(0, if_src.indexOf('?reblogAmeba'));
-                    if_href=if_href.replace('s/embed/reblog-card/', '');
+            function set_reblog(iframe_doc){
+                let reblog_card=iframe_doc.querySelector('.rb-card');
+                if(reblog_card){
+                    let data_href=reblog_card.getAttribute('href');
+                    let rb_card_main=reblog_card.querySelector('.rb-card__main');
+                    rb_card_main.addEventListener('click', function(event){
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        if(event.ctrlKey==true){
+                            window.location.href=data_href; }
+                        else{
+                            window.open(data_href, '_blank'); }}, false);
 
-                    let header_link=iframe_doc.querySelectorAll('.sorry .my_page a');
-                    if(header_link[0]){
-                        header_link[0].setAttribute('href', if_href); }
+                    document.body.addEventListener('keydown', function(event){
+                        if(event.ctrlKey==true){
+                            reblog_card.classList.add('transfer');
+                            document.body.addEventListener('keyup', function(event){
+                                reblog_card.classList.remove('transfer'); }); }});
 
-                    for(let k=1; k<header_link.length; k++){
-                        header_link[k].remove(); }
+                } // if(reblog_card)
 
-                    let contents_title=iframe_doc.querySelector('.sorry .contents__title');
-                    if(contents_title){
-                        contents_title.textContent=if_href; }
+                else{ // リブログカードが壊れている場合
+                    let iframe=document.querySelector('.reblogCard');
+                    //           iframe.style.outline='1px solid #009688';
+                    //           iframe.style.outlineOffset='-15px';
+                    //           iframe.style.borderRadius='19px';
 
-                    let ambHeader=iframe_doc.querySelector('.ambHeader');
-                    if(ambHeader){
-                        ambHeader.onclick=function(event){
-                            event.preventDefault();
-                            window.open(if_href); }}}
+                    let if_src=iframe.getAttribute('src');
+                    if(if_src){
+                        let if_href=if_src.substring(0, if_src.indexOf('?reblogAmeba'));
+                        if_href=if_href.replace('s/embed/reblog-card/', '');
 
-            } // リブログカードが壊れている場合
+                        let header_link=iframe_doc.querySelectorAll('.sorry .my_page a');
+                        if(header_link[0]){
+                            header_link[0].setAttribute('href', if_href); }
+
+                        for(let k=1; k<header_link.length; k++){
+                            header_link[k].remove(); }
+
+                        let contents_title=iframe_doc.querySelector('.sorry .contents__title');
+                        if(contents_title){
+                            contents_title.textContent=if_href; }
+
+                        let ambHeader=iframe_doc.querySelector('.ambHeader');
+                        if(ambHeader){
+                            ambHeader.onclick=function(event){
+                                event.preventDefault();
+                                window.open(if_href); }}}
+
+                } // リブログカードが壊れている場合
+
+            } // set_reblog()
 
         } // if(iframe_doc)
 
