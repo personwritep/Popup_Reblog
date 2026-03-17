@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Popup Reblog
 // @namespace        http://tampermonkey.net/
-// @version        1.1
+// @version        1.2
 // @description        リブログリンクを別タブで開く
 // @author        Ameba Blog User
 // @match        https://ameblo.jp/*
@@ -46,13 +46,11 @@ function new_retry(){
                 '.rb-card__button-more { display: none; } '+
                 '.transfer .rb-card__head { background: #fff; } '+
                 '.transfer .rb-card__author-title { color: #000; }'+
-                // リブログカードが壊れた場合
-                '.sorry { margin: 20px; } '+
-                '.sorry .ambHeader { background: #00d8c3; cursor: pointer; } '+
-                '.sorry .ambHeader:hover { opacity: 0.8; } '+
-                '.sorry .contents { padding: 6px; background: #fff; } '+
-                '.sorry .contents__text, .sorry .sp_footer__list { display: none; } '+
-                '.sorry .sp_footer { padding: 20px; } '+
+                // カードが生成されない場合
+                '.rb-card.alternative { display: block; border-radius: 4px; text-decoration: none; } '+
+                '.rb-card__icon.alternative { font-size: 14px; padding: 0; } '+
+                '.rb-card__main.alternative { padding: 4px 16px; height: 74px; } '+
+                '.rb-card__author-title.alternative { word-break: break-word; } '+
                 '</style>';
 
             if(!iframe_doc.querySelector('.r_style')){
@@ -61,7 +59,7 @@ function new_retry(){
 
             let p_reblog=
                 '<style class="p_reblog">'+
-                'iframe[data-entry-id] { height: 192px !important; }</style>';
+                'iframe[data-entry-id] { max-height: 192px; }</style>';
 
             if(!document.querySelector('.p_reblog')){
                 document.body.insertAdjacentHTML('beforeend', p_reblog); }
@@ -91,32 +89,24 @@ function new_retry(){
                 } // if(reblog_card)
 
                 else{ // リブログカードが壊れている場合
-                    let iframe=document.querySelector('.reblogCard');
-                    //           iframe.style.outline='1px solid #009688';
-                    //           iframe.style.outlineOffset='-15px';
-                    //           iframe.style.borderRadius='19px';
+                    let reblog_iframe=document.querySelector('.reblogCard');
+                    if(reblog_iframe){
+                        let reblog_src=reblog_iframe.getAttribute('src');
+                        if(reblog_src){
+                            let reblog_href=reblog_src.substring(0, reblog_src.indexOf('?reblogAmeba'));
+                            reblog_href=reblog_href.replace('s/embed/reblog-card/', '');
 
-                    let if_src=iframe.getAttribute('src');
-                    if(if_src){
-                        let if_href=if_src.substring(0, if_src.indexOf('?reblogAmeba'));
-                        if_href=if_href.replace('s/embed/reblog-card/', '');
+                            let alt_card=
+                                '<a class="rb-card alternative" href="'+ reblog_href +'">'+
+                                '<div class="rb-card__main alternative">'+
+                                '<div class="rb-card__icon alternative">Reblog Card</div>'+
+                                '<div class="rb-card__head alternative">'+
+                                '<div class="rb-card__author-title alternative">'+ reblog_href +'</div>'+
+                                '</div></div></a>';
 
-                        let header_link=iframe_doc.querySelectorAll('.sorry .my_page a');
-                        if(header_link[0]){
-                            header_link[0].setAttribute('href', if_href); }
-
-                        for(let k=1; k<header_link.length; k++){
-                            header_link[k].remove(); }
-
-                        let contents_title=iframe_doc.querySelector('.sorry .contents__title');
-                        if(contents_title){
-                            contents_title.textContent=if_href; }
-
-                        let ambHeader=iframe_doc.querySelector('.ambHeader');
-                        if(ambHeader){
-                            ambHeader.onclick=function(event){
-                                event.preventDefault();
-                                window.open(if_href); }}}
+                            let iframe_body=iframe_doc.body;
+                            if(iframe_body){
+                                iframe_body.insertAdjacentHTML('beforeend', alt_card); }}}
 
                 } // リブログカードが壊れている場合
 
@@ -125,4 +115,5 @@ function new_retry(){
         } // if(iframe_doc)
 
     } // wait_iframe_doc
+
 } // new_retry
