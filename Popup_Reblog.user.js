@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Popup Reblog
 // @namespace        http://tampermonkey.net/
-// @version        1.2
+// @version        1.3
 // @description        リブログリンクを別タブで開く
 // @author        Ameba Blog User
 // @match        https://ameblo.jp/*
@@ -47,7 +47,10 @@ function new_retry(){
                 '.transfer .rb-card__head { background: #fff; } '+
                 '.transfer .rb-card__author-title { color: #000; }'+
                 // カードが生成されない場合
-                '.rb-card.alternative { display: block; border-radius: 4px; text-decoration: none; } '+
+                '.rb-card.alternative { position: fixed; top: 6px; left: calc(50% - 200px); '+
+                'display: block; width: 400px; border: 1px solid #009688; border-radius: 4px; '+
+                'text-decoration: none; '+
+                'background: #fff; box-shadow: 2px 4px 4px 0 #00000040, 0 0 0 20px #fff; } '+
                 '.rb-card__icon.alternative { font-size: 14px; padding: 0; } '+
                 '.rb-card__main.alternative { padding: 4px 16px; height: 74px; } '+
                 '.rb-card__author-title.alternative { word-break: break-word; } '+
@@ -106,7 +109,8 @@ function new_retry(){
 
                             let iframe_body=iframe_doc.body;
                             if(iframe_body){
-                                iframe_body.insertAdjacentHTML('beforeend', alt_card); }}}
+                                if(!iframe_doc.querySelector('.alternative')){
+                                    iframe_body.insertAdjacentHTML('beforeend', alt_card); }}}}
 
                 } // リブログカードが壊れている場合
 
