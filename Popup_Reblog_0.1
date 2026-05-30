@@ -1,0 +1,23 @@
+// ==UserScript==
+// @name         Popup Reblog
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  リブログリンクを別タブで開く
+// @author       Ameba Blog User
+// @match        https://ameblo.jp/*
+// @noframes
+// @grant        none
+// ==/UserScript==
+
+window.addEventListener('load', function(){
+    'use strict';
+
+    var reblog_iframe=document.querySelector('.reblogCard');
+    if(reblog_iframe){
+        var iframe_doc=reblog_iframe.contentWindow.document;
+        var reblog_card=iframe_doc.querySelector('.rb-card');
+        var data_href=reblog_card.getAttribute('data-href');
+
+        reblog_card.addEventListener('mousedown', function(event){
+            event.preventDefault();
+            window.open(data_href, '_blank'); }, false)}})
